@@ -9,19 +9,32 @@ const keyCodes = [81, 87, 69, 65, 83, 68, 90, 88, 67];
 const keyLettersQWE = ['Q', 'W', 'E'];
 const keyLettersASD = ['A', 'S', 'D'];
 const keyLettersZXC = ['Z', 'X', 'C'];
+
+const soundLibrary1 = ['https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3',
+    'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
+];
+
 const DEFAULT = "Press a key";
-// TODO make 9 buttons on the left columns and rows like in jQuery lessons
+// TODO QWE seems to be working so redo that for the other letters
+//  also set a key for the .map
 class MyComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sound: '',
+            sound: false,
             input: DEFAULT
         };
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
     componentDidMount() {
-        document.addEventListener('keydown', this.handleKeyPress)
+        document.addEventListener('keydown', this.handleKeyPress);
     }
     componentWillUnmount() {
         document.removeEventListener('keydown', this.handleKeyPress)
@@ -30,15 +43,20 @@ class MyComponent extends React.Component {
     handleKeyPress(event) {
         if (keyCodes.includes(event.keyCode)){
             this.setState({
-                sound: '',
+                sound: true,
                 input: event.keyCode
             });
         }
     }
 
-    playSound(key) {
-
+    togglePlay = () => {
+        this.setState(
+            { sound: !this.state.sound },
+            () => {
+            this.state.sound ? this.audio.play() : this.audio.pause();
+        });
     }
+
     render() {
         return (
             <div className={"container-fluid"}>
@@ -46,9 +64,14 @@ class MyComponent extends React.Component {
                     <div className={"drum-div row"}>
                         <div className={"sound-buttons border"}>
                             <div id={"qwe"} className={"d-flex justify-content-around"}>
-                                {keyLettersQWE.map(letter => (
-                                    <button className={"btn btn-default"} id={letter + '-btn'} onClick={() =>
-                                        this.setState({sound:'', input:letter.charCodeAt(0)})}>{letter}</button>
+                                {keyLettersQWE.map((letter, i) => (
+                                    <div className={letter + "-btn-div"}>
+                                        <audio id={letter + "-sound"} src={soundLibrary1[i]}></audio>
+                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
+                                            this.setState({sound: true, input:letter.charCodeAt(0)});
+                                            document.getElementById(letter + "-sound").play();}}
+                                        >{letter}</button>
+                                    </div>
                                 ))}
                             </div>
                             <div id={"asd"} className={"d-flex justify-content-around"}>
