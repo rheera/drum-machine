@@ -75,15 +75,25 @@ class MyComponent extends React.Component {
                                 ))}
                             </div>
                             <div id={"asd"} className={"d-flex justify-content-around"}>
-                                {keyLettersASD.map(letter => (
-                                    <button className={"btn btn-default"} id={letter + '-btn'} onClick={() =>
-                                        this.setState({sound:'', input:letter.charCodeAt(0)})}>{letter}</button>
+                                {keyLettersASD.map((letter, i) => (
+                                    <div className={letter + "-btn-div"}>
+                                        <audio id={letter + "-sound"} src={soundLibrary1[i+3]}></audio>
+                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
+                                            this.setState({sound:'', input:letter.charCodeAt(0)});
+                                            document.getElementById(letter + "-sound").play();}}
+                                        >{letter}</button>
+                                    </div>
                                 ))}
                             </div>
                             <div id={"zxc"} className={"d-flex justify-content-around"}>
-                                {keyLettersZXC.map(letter => (
-                                    <button className={"btn btn-default"} id={letter + '-btn'} onClick={() =>
-                                        this.setState({sound:'', input:letter.charCodeAt(0)})}>{letter}</button>
+                                {keyLettersZXC.map((letter, i) => (
+                                    <div className={letter + "-btn-div"}>
+                                        <audio id={letter + "-sound"} src={soundLibrary1[i+6]}></audio>
+                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
+                                            this.setState({sound:'', input:letter.charCodeAt(0)});
+                                            document.getElementById(letter + "-sound").play();}}
+                                        >{letter}</button>
+                                    </div>
                                 ))}
                             </div>
                         </div>
