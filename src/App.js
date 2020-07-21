@@ -32,6 +32,7 @@ class MyComponent extends React.Component {
             input: DEFAULT
         };
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
     componentDidMount() {
         document.addEventListener('keydown', this.handleKeyPress);
@@ -40,14 +41,17 @@ class MyComponent extends React.Component {
         document.removeEventListener('keydown', this.handleKeyPress)
     }
 
+
     handleKeyPress(event) {
         if (keyCodes.includes(event.keyCode)){
             this.setState({
                 sound: true,
                 input: event.keyCode
             });
+            document.getElementById(String.fromCharCode(event.keyCode) +"-sound").play();
         }
     }
+
 
     togglePlay = () => {
         this.setState(
@@ -57,20 +61,34 @@ class MyComponent extends React.Component {
         });
     }
 
+    handleClick({currentTarget}) {
+        this.setState({
+            sound: true,
+            input: currentTarget.id.charCodeAt(0)
+        });
+        document.getElementById(currentTarget.id[0] +"-sound").play();
+    }
+
+    createButtons = () => {
+        let buttons = [];
+        for (let i = 0; i < 3; i++){
+
+        }
+    }
+
     render() {
         return (
             <div className={"container-fluid"}>
                 <div className={"d-flex justify-content-md-center align-items-center vh-100"}>
                     <div className={"drum-div row"}>
                         <div className={"sound-buttons border"}>
+
                             <div id={"qwe"} className={"d-flex justify-content-around"}>
                                 {keyLettersQWE.map((letter, i) => (
                                     <div className={letter + "-btn-div"}>
                                         <audio id={letter + "-sound"} src={soundLibrary1[i]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
-                                            this.setState({sound: true, input:letter.charCodeAt(0)});
-                                            document.getElementById(letter + "-sound").play();}}
-                                        >{letter}</button>
+                                        <button className={"btn btn-default"} id={letter + '-btn'}
+                                                onClick={this.handleClick}>{letter}</button>
                                     </div>
                                 ))}
                             </div>
@@ -78,10 +96,8 @@ class MyComponent extends React.Component {
                                 {keyLettersASD.map((letter, i) => (
                                     <div className={letter + "-btn-div"}>
                                         <audio id={letter + "-sound"} src={soundLibrary1[i+3]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
-                                            this.setState({sound:'', input:letter.charCodeAt(0)});
-                                            document.getElementById(letter + "-sound").play();}}
-                                        >{letter}</button>
+                                        <button className={"btn btn-default"} id={letter + '-btn'}
+                                                onClick={this.handleClick}>{letter}</button>
                                     </div>
                                 ))}
                             </div>
@@ -89,10 +105,8 @@ class MyComponent extends React.Component {
                                 {keyLettersZXC.map((letter, i) => (
                                     <div className={letter + "-btn-div"}>
                                         <audio id={letter + "-sound"} src={soundLibrary1[i+6]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'} onClick={() => {
-                                            this.setState({sound:'', input:letter.charCodeAt(0)});
-                                            document.getElementById(letter + "-sound").play();}}
-                                        >{letter}</button>
+                                        <button className={"btn btn-default"} id={letter + '-btn'}
+                                                onClick={this.handleClick}>{letter}</button>
                                     </div>
                                 ))}
                             </div>
