@@ -1,9 +1,15 @@
 import React from 'react';
-
+import {LIBRARY1} from "./soundObjects"
 /* ASCII Codes
 Q, W, E, A, S, D, Z, X, C
 81, 87, 69, 65, 83, 68, 90, 88, 67
  */
+
+// TODO make prettier
+//  make buttons change background color when clicked
+//  make the main app fixed in size in the center
+//  if a sound is already playing and a button is clicked it stops that sound and plays the one clicked right away
+//  add more sound libraries
 
 const keyCodes = [81, 87, 69, 65, 83, 68, 90, 88, 67];
 const keyLettersQWE = ['Q', 'W', 'E'];
@@ -11,20 +17,9 @@ const keyLettersASD = ['A', 'S', 'D'];
 const keyLettersZXC = ['Z', 'X', 'C'];
 const keyLettersGrouped = ['QWE', 'ASD', 'ZXC'];
 
-const soundLibrary1 = ['https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3',
-    'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
-];
 
 const DEFAULT = "Press a key";
-// TODO QWE seems to be working so redo that for the other letters
-//  also set a key for the .map
+
 class MyComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -47,61 +42,59 @@ class MyComponent extends React.Component {
         if (keyCodes.includes(event.keyCode)){
             this.setState({
                 sound: true,
-                input: event.keyCode
+                input: LIBRARY1[LIBRARY1.findIndex(obj => obj.key === String.fromCharCode(event.keyCode))]["soundName"]
             });
-            document.getElementById(String.fromCharCode(event.keyCode) +"-sound").play();
+            document.getElementById(String.fromCharCode(event.keyCode)).play();
         }
-    }
-
-
-    togglePlay = () => {
-        this.setState(
-            { sound: !this.state.sound },
-            () => {
-            this.state.sound ? this.audio.play() : this.audio.pause();
-        });
     }
 
     handleClick({currentTarget}) {
         this.setState({
             sound: true,
-            input: currentTarget.id.charCodeAt(0)
+            input: LIBRARY1[LIBRARY1.findIndex(obj => obj.key === currentTarget.id[0])]["soundName"]
         });
-        document.getElementById(currentTarget.id[0] +"-sound").play();
+        document.getElementById(currentTarget.id[0]).play();
     }
 
-    createButtons = () => {
-        let buttons = [];
-        for (let i = 0; i < 3; i++){
-
-        }
+    togglePlay = () => {
+        this.setState(
+            { sound: !this.state.sound },
+            () => {
+                this.state.sound ? this.audio.play() : this.audio.pause();
+            });
     }
+
 
     render() {
         return (
             <div className={"container-fluid"}>
                 <div className={"d-flex justify-content-md-center align-items-center vh-100"}>
-                    <div className={"drum-div row"}>
+                    <div className={"drum-div row"} id={"drum-machine"}>
                         <div className={"sound-buttons border"}>
                             {/* go through each group of letters (qwe, asd, zxc) and set up a div for each */}
                             {keyLettersGrouped.map((group, i) => (
-                                <div id={group + "-row"} className={"d-flex justify-content-around"}>
+                                <div id={group + "-row"} className={"d-flex justify-content-around"} key={group}>
                                     {/* for each array (keyLettersQWE, keyLettersASD etc.) give each button its own div
                                      with its own sound
                                      eval to combine the string and variable (dynamic variable)
                                      */}
                                     {eval('keyLetters' + group).map((letter, j) => (
-                                        <div className={letter + "-btn-div"}>
-                                            <audio id={letter + "-sound"} src={soundLibrary1[j]}></audio>
-                                            <button className={"btn btn-default"} id={letter + '-btn'}
-                                                    onClick={this.handleClick}>{letter}</button>
+                                        <div className={letter + '-btn-div'} key={letter}>
+                                            {/* if i = 0 the first row/group (QWE) then src is between 0-2
+                                            if second group then need to add 3 to j since src will be 3-5 etc. */}
+
+                                            <button className={"btn btn-default drum-pad"} id={letter + '-btn'}
+                                                    onClick={this.handleClick}>{letter}
+                                                    <audio className={"clip"} id={letter} src={
+                                                        LIBRARY1[i === 0 ? j : i === 1 ? j+3 : j+6]['sound']}>
+                                                    </audio>
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
                             ))}
                         </div>
-                        <div className={"sound-info border"}>
-                            <h1>Hi</h1>
+                        <div className={"sound-info border"} id={"display"}>
                             <h1>{this.state.input}</h1>
                         </div>
                     </div>
