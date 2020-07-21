@@ -9,6 +9,7 @@ const keyCodes = [81, 87, 69, 65, 83, 68, 90, 88, 67];
 const keyLettersQWE = ['Q', 'W', 'E'];
 const keyLettersASD = ['A', 'S', 'D'];
 const keyLettersZXC = ['Z', 'X', 'C'];
+const keyLettersGrouped = ['QWE', 'ASD', 'ZXC'];
 
 const soundLibrary1 = ['https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3',
     'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3',
@@ -82,34 +83,22 @@ class MyComponent extends React.Component {
                 <div className={"d-flex justify-content-md-center align-items-center vh-100"}>
                     <div className={"drum-div row"}>
                         <div className={"sound-buttons border"}>
-
-                            <div id={"qwe"} className={"d-flex justify-content-around"}>
-                                {keyLettersQWE.map((letter, i) => (
-                                    <div className={letter + "-btn-div"}>
-                                        <audio id={letter + "-sound"} src={soundLibrary1[i]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'}
-                                                onClick={this.handleClick}>{letter}</button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div id={"asd"} className={"d-flex justify-content-around"}>
-                                {keyLettersASD.map((letter, i) => (
-                                    <div className={letter + "-btn-div"}>
-                                        <audio id={letter + "-sound"} src={soundLibrary1[i+3]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'}
-                                                onClick={this.handleClick}>{letter}</button>
-                                    </div>
-                                ))}
-                            </div>
-                            <div id={"zxc"} className={"d-flex justify-content-around"}>
-                                {keyLettersZXC.map((letter, i) => (
-                                    <div className={letter + "-btn-div"}>
-                                        <audio id={letter + "-sound"} src={soundLibrary1[i+6]}></audio>
-                                        <button className={"btn btn-default"} id={letter + '-btn'}
-                                                onClick={this.handleClick}>{letter}</button>
-                                    </div>
-                                ))}
-                            </div>
+                            {/* go through each group of letters (qwe, asd, zxc) and set up a div for each */}
+                            {keyLettersGrouped.map((group, i) => (
+                                <div id={group + "-row"} className={"d-flex justify-content-around"}>
+                                    {/* for each array (keyLettersQWE, keyLettersASD etc.) give each button its own div
+                                     with its own sound
+                                     eval to combine the string and variable (dynamic variable)
+                                     */}
+                                    {eval('keyLetters' + group).map((letter, j) => (
+                                        <div className={letter + "-btn-div"}>
+                                            <audio id={letter + "-sound"} src={soundLibrary1[j]}></audio>
+                                            <button className={"btn btn-default"} id={letter + '-btn'}
+                                                    onClick={this.handleClick}>{letter}</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                         <div className={"sound-info border"}>
                             <h1>Hi</h1>
